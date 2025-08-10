@@ -7,6 +7,9 @@ export class UrlShortenerService {
     }
 
     async shortenUrl(originalUrl: string) : Promise<string> {
+        if(!originalUrl) {
+            return "";
+        }
         let url = await this.urlRepository.getUrlByOriginalUrl(originalUrl);
         if(url) {
             return url.shortUrl;
@@ -18,7 +21,7 @@ export class UrlShortenerService {
             url = await this.urlRepository.getUrlByShortUrl(shortUrl);
         }
 
-        await this.urlRepository.createUrl(originalUrl, shortUrl);
+        await this.urlRepository.createUrl(originalUrl, `urls/${shortUrl}`);
         return shortUrl;
     }
 
@@ -29,6 +32,4 @@ export class UrlShortenerService {
     async getUrlByShortUrl(shortUrl: string) {
         return await this.urlRepository.getUrlByShortUrl(shortUrl);
     }
-
-    // TODO 
 }
